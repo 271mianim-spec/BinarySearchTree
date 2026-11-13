@@ -22,7 +22,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public boolean isEmpty()
     {
         // do not use a size variable
-        return false;
+        return root == null;
     }
 
     // Returns the number of elements in this BST.
@@ -35,6 +35,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Adds element to this BST. The tree retains its BST property.
     public void add (T element)
     {
+        ((Comparable<T>)element).compareTo(element);
 
     }
 
@@ -66,18 +67,21 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     }
 
     // Returns a list of elements from a preorder traversal
+    // pLR (print left right)
     public List<T> preorderTraverse()
     {
         return null;
     }
 
     // Returns a list of elements from an inorder traversal
+    // LpR
     public List<T> inorderTraverse()
     {
         return null;
     }
 
     // Returns a list of elements from a postorder traversal
+    // LRp
     public List<T> postorderTraverse()
     {
         return null;
