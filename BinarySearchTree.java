@@ -12,30 +12,66 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
 
     protected BinaryNode<T> root;      // reference to the root of this BST
 
+    protected int size;
+
     // Creates an empty Binary Search Tree object
     public BinarySearchTree()
     {
-
+        this.size = 0;
     }
 
     // Returns true if this BST is empty; otherwise, returns false.
     public boolean isEmpty()
     {
-        // do not use a size variable
         return root == null;
     }
 
     // Returns the number of elements in this BST.
     public int size()
     {
-        // do not use a size variable
-        return 0;
+        return this.size;
+//        int counter = 0;
+//        if (isEmpty()) {
+//            return 0;
+//        }
+//
+//        return count(counter);
     }
+
+//    public int count(int count) {
+//
+//        return 0;
+//    }
 
     // Adds element to this BST. The tree retains its BST property.
     public void add (T element)
     {
-        ((Comparable<T>)element).compareTo(element);
+        size++;
+        BinaryNode<T> newNode = new BinaryNode<T>(element);
+        if (isEmpty()) {
+            root = newNode;
+
+            return;
+        }
+        BinaryNode<T> pointer = root;
+        while (pointer != null) {
+            if (pointer.getInfo().compareTo(element) > 0) {
+                if (pointer.getLeft() == null) {
+                    pointer.setLeft(newNode);
+                    break;
+                } else {
+                    pointer = pointer.getLeft();
+                }
+            } else {
+                if (pointer.getRight() == null) {
+                    pointer.setRight(newNode);
+                    break;
+                } else {
+                    pointer = pointer.getRight();
+                }
+
+            }
+        }
 
     }
 
@@ -43,6 +79,35 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // e.compareTo(element) == 0; otherwise, returns false.
     public boolean contains (T element)
     {
+        BinaryNode<T> pointer = root;
+        if (pointer.getInfo().equals(element)) {
+            return true;
+        }
+        while (pointer != null) {
+
+            if (pointer.getInfo().compareTo(element) > 0) {
+                if (pointer.getLeft() == null) {
+                    return false;
+                } else {
+                    if (pointer.getLeft().getInfo().equals(element)) {
+                        return true;
+                    } else {
+                        pointer = pointer.getLeft();
+                    }
+                }
+
+            } else {
+                if (pointer.getRight() == null) {
+                    return false;
+                } else {
+                    if (pointer.getRight().getInfo().equals(element)) {
+                        return true;
+                    } else {
+                        pointer = pointer.getRight();
+                    }
+                }
+            }
+        }
         return false;
     }
 
