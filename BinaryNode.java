@@ -52,6 +52,7 @@ public class BinaryNode<T extends Comparable<T>>
   {
     return right;
   }
+
 }
  
  
