@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.*;
 
 /**
@@ -248,6 +249,15 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     {
         BinaryNode<T> gettingReplaced = find(element);
 
+        if (gettingReplaced == null) {
+            return;
+        }
+
+        if (gettingReplaced == root && gettingReplaced.getLeft() == null) {
+            root = gettingReplaced.getRight();
+            return;
+        }
+
         if (gettingReplaced.getLeft() == null && gettingReplaced.getRight() == null) {
             if (removalParent.getInfo().compareTo(gettingReplaced.getInfo()) > 0) {
                 removalParent.setLeft(null);
@@ -257,25 +267,45 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
             return;
         }
 
-        BinaryNode<T> replacedByPrevious = gettingReplaced;
-        while (replacedByPrevious.getRight().getRight() != null) {
-            if (replacedByPrevious.getRight() == null) {
-                break;
+        if (gettingReplaced.getLeft() == null ) {
+            if (removalParent == null) {
+                root = gettingReplaced.getRight();
+            } else if (removalParent.getLeft() == gettingReplaced) {
+                removalParent.setLeft(gettingReplaced.getRight());
+            } else {
+                removalParent.setRight(gettingReplaced.getRight());
             }
-            replacedByPrevious = replacedByPrevious.getRight();
+            return;
         }
-        BinaryNode<T> replacedBy = replacedByPrevious.getRight();
 
-        replacedBy.setLeft(gettingReplaced.getLeft());
-        replacedBy.setRight(gettingReplaced.getRight());
+        if (gettingReplaced.getRight() == null ) {
+            if (removalParent == null) {
+                root = gettingReplaced.getLeft();
+            } else if (removalParent.getRight() == gettingReplaced) {
+                removalParent.setRight(gettingReplaced.getLeft());
+            } else {
+                removalParent.setLeft(gettingReplaced.getLeft());
+            }
+            return;
+        }
 
+        BinaryNode<T> smallestSubNode = gettingReplaced.getRight();
+
+        BinaryNode<T> smallestSubNodeParent = gettingReplaced.getLeft();
+        while (smallestSubNode.getLeft() != null) {
+            smallestSubNodeParent = smallestSubNode;
+            smallestSubNode = smallestSubNode.getLeft();
+        }
+
+        smallestSubNode.setLeft(gettingReplaced.getLeft());
+        if (smallestSubNode != gettingReplaced) {
+            smallestSubNode.setRight(gettingReplaced.getRight());
+        }
         if (removalParent.getInfo().compareTo(gettingReplaced.getInfo()) > 0) {
-            removalParent.setLeft(replacedBy);
+            removalParent.setLeft(smallestSubNode);
         } else {
-            removalParent.setRight(replacedBy);
+            removalParent.setRight(smallestSubNode);
         }
-
-        replacedByPrevious.setRight(null);
 
     }
 
@@ -283,5 +313,16 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Restructures this BST to be optimally balanced
     public void balance()
     {
+        ArrayList<T> allElements = (ArrayList<T>) inorderTraverse();
+
+        int midElement = allElements.size() / 2;
+
+        root = new BinaryNode<T>(allElements.get(midElement));
+
+        connectBalanceNode(allElements, root);
+    }
+
+    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node) {
+
     }
 }
