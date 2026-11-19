@@ -313,16 +313,45 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Restructures this BST to be optimally balanced
     public void balance()
     {
-        ArrayList<T> allElements = (ArrayList<T>) inorderTraverse();
+        ArrayList<T> allElements = (ArrayList<T>) inorderTraverse(); // objects
+
+//        System
 
         int midElement = allElements.size() / 2;
 
         root = new BinaryNode<T>(allElements.get(midElement));
 
-        connectBalanceNode(allElements, root);
+        for (int i = midElement + 1; i < allElements.size(); i++) {
+            BinaryNode<T> temp = (BinaryNode<T>) allElements.get(i);
+        }
+
+//        connectBalanceNode(allElements, root, 1);
     }
 
-    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node) {
+    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node, int level) {
+//        int nodeInt = allElements.indexOf(node.getInfo());
+//        int elementsSize = allElements.size()/(2*level);
+//        System.out.println(elementsSize);
+//
+//        if (elementsSize < 0) {
+//            return;
+//        }
+//
+//
+
+//        T leftNodeT = allElements.get((elementsSize/2));
+//        BinaryNode<T> leftNode = new BinaryNode<T>(leftNodeT);
+//
+//        node.setLeft(leftNode);
+//
+//        T rightNodeT = allElements.get(allElements.size()/2 + elementsSize);
+//        BinaryNode<T> rightNode = new BinaryNode<T> (rightNodeT);
+//        node.setRight(rightNode);
+//
+//        System.out.println(toString());
+//
+//        connectBalanceNode(allElements, leftNode, level+1);
+//        connectBalanceNode(allElements, rightNode, level+1);
 
     }
 }
