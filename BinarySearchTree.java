@@ -28,6 +28,10 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Returns the number of elements in this BST.
     public int size()
     {
+        if (root == null) {
+            return 0;
+        }
+
         return sizeIteration(root);
 //        int counter = 0;
 //        if (isEmpty()) {
@@ -37,7 +41,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
 //        return count(counter);
     }
 
-    public int sizeIteration(BinaryNode<T> node) {
+    private int sizeIteration(BinaryNode<T> node) {
         int size = 1;
         if (node.getLeft() != null) {
             size += sizeIteration(node.getLeft());
@@ -90,8 +94,13 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // e.compareTo(element) == 0; otherwise, returns false.
     public boolean contains (T element)
     {
+
+        if (isEmpty()) {
+            return false;
+        }
+
         BinaryNode<T> pointer = root;
-        if (pointer.getInfo().equals(element)) {
+        if (pointer.getInfo().compareTo(element) == 0) {
             return true;
         }
         while (pointer != null) {
@@ -100,7 +109,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
                 if (pointer.getLeft() == null) {
                     return false;
                 } else {
-                    if (pointer.getLeft().getInfo().equals(element)) {
+                    if (pointer.getLeft().getInfo().compareTo(element) == 0) {
                         return true;
                     } else {
                         pointer = pointer.getLeft();
@@ -111,7 +120,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
                 if (pointer.getRight() == null) {
                     return false;
                 } else {
-                    if (pointer.getRight().getInfo().equals(element)) {
+                    if (pointer.getRight().getInfo().compareTo(element) == 0) {
                         return true;
                     } else {
                         pointer = pointer.getRight();
@@ -125,8 +134,12 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // The same as contains but returns the actual node instead of a boolean
     public BinaryNode<T> find(T element)
     {
+        if (isEmpty()) {
+            return null;
+        }
+
         BinaryNode<T> pointer = root;
-        if (pointer.getInfo().equals(element)) {
+        if (pointer.getInfo().compareTo(element) == 0) {
             removalParent = null;
             return pointer;
         }
@@ -136,7 +149,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
                 if (pointer.getLeft() == null) {
                     return null;
                 } else {
-                    if (pointer.getLeft().getInfo().equals(element)) {
+                    if (pointer.getLeft().getInfo().compareTo(element) == 0) {
                         removalParent = pointer;
                         return pointer.getLeft();
                     } else {
@@ -148,7 +161,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
                 if (pointer.getRight() == null) {
                     return null;
                 } else {
-                    if (pointer.getRight().getInfo().equals(element)) {
+                    if (pointer.getRight().getInfo().compareTo(element) == 0) {
                         removalParent = pointer;
                         return pointer.getRight();
                     } else {
@@ -185,13 +198,16 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     public List<T> preorderTraverse()
     {
         ArrayList<T> printOrder = new ArrayList<T>();
+        if (root == null) {
+            return printOrder;
+        }
 
         preorderTraverseIteration(printOrder, root);
 
         return printOrder;
     }
 
-    public void preorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
+    private void preorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
         printOrder.add(node.getInfo());
         if (node.getLeft() != null) {
             preorderTraverseIteration(printOrder, node.getLeft());
@@ -208,12 +224,16 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     {
         ArrayList<T> printOrder = new ArrayList<T>();
 
+        if (root == null) {
+            return printOrder;
+        }
+
         inorderTraverseIteration(printOrder, root);
 
         return printOrder;
     }
 
-    public void inorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
+    private void inorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
         if (node.getLeft() != null) {
             inorderTraverseIteration(printOrder, node.getLeft());
         }
@@ -227,14 +247,18 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // LRp
     public List<T> postorderTraverse()
     {
+
         ArrayList<T> printOrder = new ArrayList<T>();
+        if (root == null) {
+            return printOrder;
+        }
 
         postorderTraverseIteration(printOrder, root);
 
         return printOrder;
     }
 
-    public void postorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
+    private void postorderTraverseIteration(List<T> printOrder, BinaryNode<T> node) {
         if (node.getLeft() != null) {
             postorderTraverseIteration(printOrder, node.getLeft());
         }
@@ -291,21 +315,29 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
 
         BinaryNode<T> smallestSubNode = gettingReplaced.getRight();
 
-        BinaryNode<T> smallestSubNodeParent = gettingReplaced.getLeft();
+        BinaryNode<T> smallestSubNodeParent = gettingReplaced;
+
+
         while (smallestSubNode.getLeft() != null) {
             smallestSubNodeParent = smallestSubNode;
             smallestSubNode = smallestSubNode.getLeft();
         }
-
-        smallestSubNode.setLeft(gettingReplaced.getLeft());
-        if (smallestSubNode != gettingReplaced) {
+        if (smallestSubNodeParent != gettingReplaced) {
+            smallestSubNodeParent.setLeft(smallestSubNode.getRight());
             smallestSubNode.setRight(gettingReplaced.getRight());
         }
-        if (removalParent.getInfo().compareTo(gettingReplaced.getInfo()) > 0) {
+
+        smallestSubNode.setLeft(gettingReplaced.getLeft());
+
+        if (removalParent == null) {
+            root = smallestSubNode;
+        } else if (removalParent.getInfo().compareTo(gettingReplaced.getInfo()) > 0) {
             removalParent.setLeft(smallestSubNode);
         } else {
             removalParent.setRight(smallestSubNode);
         }
+
+
 
     }
 
@@ -313,6 +345,10 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     // Restructures this BST to be optimally balanced
     public void balance()
     {
+        if (root == null || size() == 1) {
+            return;
+        }
+
         ArrayList<T> allElements = (ArrayList<T>) inorderTraverse(); // objects
 
         int midElement = allElements.size() / 2;
@@ -323,7 +359,7 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
         connectBalanceNode(allElements, root, midElement+1, allElements.size() - 1, false);
     }
 
-    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node, int min, int max, boolean isLeft) {
+    private void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node, int min, int max, boolean isLeft) {
 
         if (min > max) {
             return;
