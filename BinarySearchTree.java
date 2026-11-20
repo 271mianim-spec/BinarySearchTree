@@ -315,43 +315,31 @@ public class BinarySearchTree<T extends Comparable<T>> implements BSTInterface<T
     {
         ArrayList<T> allElements = (ArrayList<T>) inorderTraverse(); // objects
 
-//        System
-
         int midElement = allElements.size() / 2;
 
         root = new BinaryNode<T>(allElements.get(midElement));
 
-        for (int i = midElement + 1; i < allElements.size(); i++) {
-            BinaryNode<T> temp = (BinaryNode<T>) allElements.get(i);
-        }
-
-//        connectBalanceNode(allElements, root, 1);
+        connectBalanceNode(allElements, root, 0, midElement - 1, true);
+        connectBalanceNode(allElements, root, midElement+1, allElements.size() - 1, false);
     }
 
-    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node, int level) {
-//        int nodeInt = allElements.indexOf(node.getInfo());
-//        int elementsSize = allElements.size()/(2*level);
-//        System.out.println(elementsSize);
-//
-//        if (elementsSize < 0) {
-//            return;
-//        }
-//
-//
+    public void connectBalanceNode(ArrayList<T> allElements, BinaryNode<T> node, int min, int max, boolean isLeft) {
 
-//        T leftNodeT = allElements.get((elementsSize/2));
-//        BinaryNode<T> leftNode = new BinaryNode<T>(leftNodeT);
-//
-//        node.setLeft(leftNode);
-//
-//        T rightNodeT = allElements.get(allElements.size()/2 + elementsSize);
-//        BinaryNode<T> rightNode = new BinaryNode<T> (rightNodeT);
-//        node.setRight(rightNode);
-//
-//        System.out.println(toString());
-//
-//        connectBalanceNode(allElements, leftNode, level+1);
-//        connectBalanceNode(allElements, rightNode, level+1);
+        if (min > max) {
+            return;
+        }
+
+        int midElement = (min+max)/2;
+        BinaryNode<T> newNode = new BinaryNode<T>(allElements.get(midElement));
+
+        if (isLeft) {
+            node.setLeft(newNode);
+        } else {
+            node.setRight(newNode);
+        }
+
+        connectBalanceNode(allElements, newNode, min, midElement - 1, true);
+        connectBalanceNode(allElements, newNode, midElement+1, max, false);
 
     }
 }
